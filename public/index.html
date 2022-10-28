@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Martins redactle</title>
+        <link href="/css/redactle.css" rel="stylesheet">
+        <link rel="preload" href="/fonts/RobotoMono.subset.woff2" as="font" type="font/woff2" crossorigin>
+        <script src="/js/redactle.js" defer></script>
+    </head>
+    <body>
+        <div id="root">
+            <div id="main">
+                <div id="game"></div>
+                <div id="guesses"></div>
+            </div>
+            <form id="promptForm">
+                <button type="button" id="scrollToTop">Skråll til tåppen</button>
+                <button type="button" id="changeAvatar" title="Bytt avatar og kallenavn"></button>
+                <input type="text" id="prompt" placeholder="Tast i vei! 🤓">
+                <input type="number" id="promptCharCounter" value="0" disabled readonly>
+                <button type="submit" id="submitGuessButton">Gjett</button>
+            </form>
+        </div>
+    </body>
+</html>

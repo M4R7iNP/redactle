@@ -1,0 +1,11 @@
+node_modules
+.env
+.nyc_output
+
+public/js
+public/css
+articlelist.json
+ordbank.db
+*.txt
+*.br
+*.gz

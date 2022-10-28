@@ -1,0 +1,85 @@
+{
+    "name": "sladdactle-cli",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "build": "npm run build:js && npm run build:css",
+        "build:js.bak": "npx terser -c -m toplevel --toplevel --comments '/Copyright/' --ecma 2021 -o public/js/redactle.js js/redactle.js",
+        "build:js": "esbuild --bundle --minify js/redactle.js --outfile=public/js/redactle.js",
+        "build:css": "postcss css --dir public/css",
+        "compress:brotli": "brotli -kfZ public/css/*.css public/js/*.js public/index.html",
+        "start": "node index.js",
+        "dev": "node --watch index.js",
+        "test": "NODE_ENV=test tap"
+    },
+    "engine": {
+        "node": ">=16"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "blessed": "^0.1.81",
+        "blessed-contrib": "^4.11.0",
+        "bufferutil": "^4.0.6",
+        "date-fns": "^2.29.2",
+        "dotenv": "^16.0.2",
+        "emoji-regex": "^10.1.0",
+        "ioredis": "^5.2.3",
+        "lodash.chunk": "^4.2.0",
+        "node-fetch": "^3.2.10",
+        "parse5": "^7.0.0",
+        "parse5-html-rewriting-stream": "^7.0.0",
+        "rehype-parse": "^8.0.4",
+        "rehype-sanitize": "^5.0.1",
+        "rehype-stringify": "^9.0.3",
+        "sqlite3": "^5.0.11",
+        "unified": "^10.1.2",
+        "unist-util-filter": "^4.0.0",
+        "ws": "^8.8.1"
+    },
+    "devDependencies": {
+        "@istanbuljs/esm-loader-hook": "^0.2.0",
+        "@types/ioredis": "^4.28.10",
+        "cssnano": "^5.1.13",
+        "esbuild": "^0.15.10",
+        "eslint": "^8.23.0",
+        "eslint-plugin-security": "^1.5.0",
+        "esmock": "^2.0.5",
+        "get-port": "^6.1.2",
+        "ioredis-mock": "^8.2.2",
+        "postcss": "^8.4.16",
+        "postcss-cli": "^10.0.0",
+        "postcss-preset-env": "^7.8.2",
+        "tap": "^16.3.0"
+    },
+    "browserslist": [
+        "cover 95% in NO and last 1 year"
+    ],
+    "nodemonConfig": {
+        "ignore": [
+            "node_modules",
+            "public",
+            "js",
+            "css",
+            "*.json",
+            "*.html",
+            "*.txt",
+            "*.test.js",
+            "tap-fixtures"
+        ]
+    },
+    "tap": {
+        "branches": 60,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90,
+        "node-arg": [
+            "--no-warnings",
+            "--experimental-loader",
+            "@istanbuljs/esm-loader-hook",
+            "--loader=esmock"
+        ]
+    }
+}
