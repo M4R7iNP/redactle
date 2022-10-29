@@ -1,7 +1,10 @@
+// @ts-check
 import { promisify } from 'node:util';
 import sqlite3 from 'sqlite3';
 
-const db = new sqlite3.Database('./ordbank.db');
+const db = new sqlite3.Database(
+    new URL('../data/ordbank.db', import.meta.url).pathname
+);
 
 const get_lemmas_stmt = db.prepare(`
     select distinct oppslag

@@ -8,9 +8,12 @@ export const START_DATE = new Date('2022-08-17 18:00:00');
  * @returns {Promise<string>}
  */
 const getWikipediaArticleTitleOfTheDay = async (date = new Date()) => {
-    return JSON.parse(await readFile('./articlelist.json', 'utf8'))[
-        differenceInDays(date, START_DATE)
-    ];
+    return JSON.parse(
+        await readFile(
+            new URL('../data/articlelist.json', import.meta.url),
+            'utf8'
+        )
+    )[differenceInDays(date, START_DATE)];
 };
 
 export default getWikipediaArticleTitleOfTheDay;
