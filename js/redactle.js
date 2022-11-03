@@ -1,4 +1,3 @@
-// @ts-check
 import h from './h.js';
 import RedactedWord from './RedactedWord.js';
 

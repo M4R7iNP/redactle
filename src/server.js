@@ -1,5 +1,3 @@
-// @ts-check
-
 import { createServer } from 'node:http';
 import { WebSocketServer } from 'ws';
 import emojiRegex from 'emoji-regex';

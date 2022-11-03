@@ -1,9 +1,10 @@
-// @ts-check
 import { promisify } from 'node:util';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
 import sqlite3 from 'sqlite3';
 
 const db = new sqlite3.Database(
-    new URL('../data/ordbank.db', import.meta.url).pathname
+    resolve(dirname(fileURLToPath(import.meta.url)), '../data/ordbank.db')
 );
 
 const get_lemmas_stmt = db.prepare(`
@@ -21,8 +22,13 @@ const get_lemmas_stmt_all = promisify(
 );
 
 /**
- * @param {string | string[]}
+ * @param {string | string[]} words
  * @returns {Promise<string[]>}
  */
 export const getLemmas = async (words) =>
-    get_lemmas_stmt_all(words).then((rows) => rows.map((row) => row.OPPSLAG));
+    get_lemmas_stmt_all(words).then(
+        /**
+         * @param {Array<{ OPPSLAG: string }>} rows
+         */
+        (rows) => rows.map((row) => row.OPPSLAG)
+    );

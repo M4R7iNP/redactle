@@ -2,7 +2,8 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "module": "es2022",
-        "target": "es2022"
+        "target": "es2022",
+        "checkJs": true
     },
     "exclude": ["node_modules"],
     "watchOptions": {

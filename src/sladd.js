@@ -1,4 +1,3 @@
-// @ts-check
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { RewritingStream } from 'parse5-html-rewriting-stream';
@@ -23,8 +22,6 @@ export const normalize = (str) =>
         .replace(NORMALIZED_Å_REGEX, 'å')
         .replace(/\p{Diacritic}/gu, '');
 
-const noop = () => {};
-
 /**
  * Split text (not html)
  *
@@ -35,11 +32,11 @@ const noop = () => {};
  * @param {(match: string) => void} [spacingOrSymbolsCallback]
  * @void
  */
-export const splitText = (str, callback, spacingOrSymbolsCallback = noop) =>
+export const splitText = (str, callback, spacingOrSymbolsCallback) =>
     str
         .split(/([^\s!"#$€%&'()\\*+,./:;<=>?@[\]\\^_`’{|}~•«»-]+)/giu)
         .forEach((match, idx) => {
-            idx % 2 === 1 ? callback(match) : spacingOrSymbolsCallback(match);
+            idx % 2 === 1 ? callback(match) : spacingOrSymbolsCallback?.(match);
         });
 
 /**

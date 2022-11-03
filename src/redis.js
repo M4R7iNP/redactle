@@ -1,4 +1,3 @@
-// @ts-check
 import Redis from 'ioredis';
 import { sladdHtml, normalize, splitText } from './sladd.js';
 import downloadWikipediaArticle from './download_wikipedia_article.js';

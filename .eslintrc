@@ -1,7 +1,11 @@
 {
     "root": true,
-    "plugins": ["security"],
-    "extends": ["eslint:recommended", "plugin:security/recommended"],
+    "plugins": ["security", "@typescript-eslint"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:security/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "env": {
         "node": true,
         "es6": true
