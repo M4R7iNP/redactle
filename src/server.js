@@ -164,21 +164,6 @@ wss.on('connection', async (conn, req) => {
                     .flat(1);
                 guessedWordLemmas.push(...lemmas);
 
-                if (hasGuessedSolution(game, guessedWordLemmas)) {
-                    // Set redactedState to answerText and emit to clients.
-                    game.redactedState = game.answerText;
-                    sendToGameClients(
-                        gameId,
-                        JSON.stringify({
-                            action: 'GAME_STATE',
-                            redactedState: game.redactedState,
-                            guesses: game.guesses.map((guess) =>
-                                formatGuessForClients(game, guess)
-                            ),
-                        })
-                    );
-                }
-
                 // construct matches by normalized check
                 guess.variations ??= [];
                 guess.variationWordIds ??= [];
@@ -210,13 +195,28 @@ wss.on('connection', async (conn, req) => {
                 game.guesses.push(guess);
                 updateGameById(gameId, game);
 
-                sendToGameClients(
-                    gameId,
-                    JSON.stringify({
-                        action: 'GUESS',
-                        guess: formatGuessForClients(game, guess),
-                    })
-                );
+                if (hasGuessedSolution(game, guessedWordLemmas)) {
+                    // Set redactedState to answerText and emit to clients.
+                    game.redactedState = game.answerText;
+                    sendToGameClients(
+                        gameId,
+                        JSON.stringify({
+                            action: 'GAME_STATE',
+                            redactedState: game.redactedState,
+                            guesses: game.guesses.map((guess) =>
+                                formatGuessForClients(game, guess)
+                            ),
+                        })
+                    );
+                } else {
+                    sendToGameClients(
+                        gameId,
+                        JSON.stringify({
+                            action: 'GUESS',
+                            guess: formatGuessForClients(game, guess),
+                        })
+                    );
+                }
             }
         } catch (err) {
             console.error(err);
