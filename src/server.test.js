@@ -1,4 +1,4 @@
-import t from 'tap';
+import test from 'ava';
 import esmock from 'esmock';
 import ioredis from 'ioredis-mock';
 import { WebSocket } from 'ws';
@@ -11,16 +11,16 @@ const server = await esmock(
     {
         ioredis,
         './getWikipediaArticleTitleOfTheDay.js': () => 'Mata Hari',
-    }
+    },
 );
 
 const port = await getPort();
 
-t.before((done) => {
-    server.listen(port, done);
+test.before(() => {
+    server.listen(port);
 });
 
-t.teardown(() => {
+test.after(() => {
     server.close();
 });
 
@@ -52,26 +52,26 @@ const createWebsocketQueue = (ws) => {
         });
 };
 
-t.test('server.js', async (t) => {
+test('server.js', async (t) => {
     const addr = server.address();
     const clientA = new WebSocket(
         `ws://localhost:${
             addr.port
-        }?gameId=${GAME_ID}&playerId=a&emoji=${encodeURIComponent('💩')}`
+        }?gameId=${GAME_ID}&playerId=a&emoji=${encodeURIComponent('💩')}`,
     );
     const a = createWebsocketQueue(clientA);
-    t.has(await a(), { action: 'PLAYER_JOINED' });
-    t.has(await a(), { action: 'GAME_STATE', guesses: [] });
+    t.like(await a(), { action: 'PLAYER_JOINED' });
+    t.like(await a(), { action: 'GAME_STATE', guesses: [] });
 
     const clientB = new WebSocket(
         `ws://localhost:${
             addr.port
-        }?gameId=${GAME_ID}&playerId=b&emoji=${encodeURIComponent('🌈')}`
+        }?gameId=${GAME_ID}&playerId=b&emoji=${encodeURIComponent('🌈')}`,
     );
     const b = createWebsocketQueue(clientB);
-    t.has(await b(), { action: 'PLAYER_JOINED' });
-    t.has(await b(), { action: 'GAME_STATE', guesses: [] });
-    t.has(await a(), { action: 'PLAYER_JOINED' });
+    t.like(await b(), { action: 'PLAYER_JOINED' });
+    t.like(await b(), { action: 'GAME_STATE', guesses: [] });
+    t.like(await a(), { action: 'PLAYER_JOINED' });
 
     // First guess, should match
     clientA.send(JSON.stringify({ action: 'GUESS', word: 'spion' }));
@@ -80,16 +80,16 @@ t.test('server.js', async (t) => {
         guess: { word: 'spion', emoji: '💩' },
     };
     let msg;
-    t.has((msg = await a()), expectedGuess);
-    t.has(await b(), expectedGuess);
-    t.ok(msg.guess.occurrences > 0);
+    t.like((msg = await a()), expectedGuess);
+    t.like(await b(), expectedGuess);
+    t.true(msg.guess.occurrences > 0);
 
     clientB.send(JSON.stringify({ action: 'GUESS', word: 'spion' }));
-    t.has(await b(), { action: 'EXISTING_GUESS' });
+    t.like(await b(), { action: 'EXISTING_GUESS' });
 
     // Second guess, should not match
     clientB.send(
-        JSON.stringify({ action: 'GUESS', word: 'aaaaaaaaaaaaaaaaaaaaaaaa' })
+        JSON.stringify({ action: 'GUESS', word: 'aaaaaaaaaaaaaaaaaaaaaaaa' }),
     );
     const expectedGuess2 = {
         action: 'GUESS',
@@ -99,14 +99,14 @@ t.test('server.js', async (t) => {
             occurrences: 0,
         },
     };
-    t.has(await b(), expectedGuess2);
-    t.has(await a(), expectedGuess2);
+    t.like(await b(), expectedGuess2);
+    t.like(await a(), expectedGuess2);
 
     // test SET_EMOJI
     const tada = '🎉';
     clientA.send(JSON.stringify({ action: 'SET_EMOJI', emoji: tada }));
-    t.equal((await a()).guesses[0].emoji, tada);
-    t.equal((await b()).guesses[0].emoji, tada);
+    t.is((await a()).guesses[0].emoji, tada);
+    t.is((await b()).guesses[0].emoji, tada);
 
     clientA.close();
     clientB.close();

@@ -1,4 +1,4 @@
-import t from 'tap';
+import test from 'ava';
 import esmock from 'esmock';
 import ioredis from 'ioredis-mock';
 
@@ -11,9 +11,9 @@ const { GAMES, serializeGame, unserializeGame, createGame, getGameById } =
         './download_wikipedia_article.js': async () => answerText,
     });
 
-t.test('createGame()', async (t) => {
+test('createGame()', async (t) => {
     const game = await createGame('createGame-test');
-    /** @type {Game} */
+    /** @type {Partial<Game>} */
     const expected = {
         answerText,
         solution: 'Mata Hari',
@@ -21,17 +21,15 @@ t.test('createGame()', async (t) => {
         playerEmojis: new Map(),
     };
 
-    t.has(game, expected);
+    t.like(game, expected);
 
-    t.test('getGameById() can fetch from redis', async (t) => {
-        GAMES.clear();
-        const game = await getGameById('createGame-test');
-        t.has(game, expected);
-    });
+    GAMES.clear();
+    const game2 = await getGameById('createGame-test');
+    t.like(game2, expected, 'getGameById() can fetch from redis');
 });
 
-t.test('serializing and unserializing', async (t) => {
-    /** @type {Game} */
+test('serializing and unserializing', async (t) => {
+    /** @type {any} */
     const game = {
         answerText: '<html>',
         solution: 'Mata Hari',
@@ -42,5 +40,5 @@ t.test('serializing and unserializing', async (t) => {
         ]),
     };
 
-    t.same(unserializeGame(serializeGame(game)), game);
+    t.deepEqual(unserializeGame(serializeGame(game)), game);
 });

@@ -6,9 +6,9 @@ const TOP_WORDS = JSON.parse(
     await readFile(
         resolve(
             dirname(fileURLToPath(import.meta.url)),
-            '../data/top_words.json'
+            '../data/top_words.json',
         ),
-        'utf8'
-    )
+        'utf8',
+    ),
 );
 export default TOP_WORDS;

@@ -7,7 +7,7 @@ import TOP_WORDS from './top_words.js';
 // eslint-disable-next-line security/detect-non-literal-regexp
 const NORMALIZED_Å_REGEX = new RegExp(
     Buffer.from('61cc8a', 'hex').toString(),
-    'g'
+    'g',
 );
 
 /**
@@ -71,7 +71,7 @@ export async function sladdHtml(html) {
             },
             (text) => {
                 rewriter.emitText({ text });
-            }
+            },
         );
     });
 
@@ -84,7 +84,7 @@ export async function sladdHtml(html) {
                 html += chunk;
             }
             return html;
-        }
+        },
     );
 
     return {

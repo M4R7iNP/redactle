@@ -36,7 +36,7 @@ function renderGuesses(guesses) {
                           {
                               className: 'guesser',
                           },
-                          guess.emoji
+                          guess.emoji,
                       )
                     : '',
                 h(
@@ -46,10 +46,10 @@ function renderGuesses(guesses) {
                             isCorrectGuess ? 'correct' : 'wrong'
                         }`,
                     },
-                    word_to_show
+                    word_to_show,
                 ),
                 h('span', { className: 'occurrences' }, `(${occurrences})`),
-            ]
+            ],
         );
         guessesElm.append(row);
     }
@@ -122,7 +122,7 @@ const connect = () => {
                     for (const wordId of wordIds) {
                         /** @type {RedactedWord} */
                         const elm = document.querySelector(
-                            `redacted-word[data-word-id="${wordId}"]`
+                            `redacted-word[data-word-id="${wordId}"]`,
                         );
                         elm.setAttribute('data-word', variation);
                     }
@@ -140,7 +140,7 @@ const connect = () => {
                 for (const wordId of wordIds) {
                     /** @type {RedactedWord} */
                     const elm = document.querySelector(
-                        `redacted-word[data-word-id="${wordId}"]`
+                        `redacted-word[data-word-id="${wordId}"]`,
                     );
                     elm.setAttribute('data-word', variation);
                     elm.render();
@@ -200,7 +200,7 @@ promptElm.addEventListener(
         ) {
             ev.preventDefault();
         }
-    }
+    },
 );
 
 promptElm.addEventListener('keyup', () => {
@@ -237,7 +237,7 @@ document.querySelector('#guesses').addEventListener(
             return;
         }
         const guess = GUESSES.find(
-            (guess) => guess.word === guessElm.getAttribute('data-word')
+            (guess) => guess.word === guessElm.getAttribute('data-word'),
         );
 
         if (LAST_CLICKED_GUESS_WORD !== guess.word) {
@@ -272,7 +272,7 @@ document.querySelector('#guesses').addEventListener(
         }
 
         const elmToFocus = document.querySelector(
-            `#game .guess.correct[data-word-id="${wordIdToClick}"]`
+            `#game .guess.correct[data-word-id="${wordIdToClick}"]`,
         );
         LAST_CLICKED_WORD_ID = wordIdToClick;
         LAST_CLICKED_GUESS_WORD = guess.word;
@@ -282,7 +282,7 @@ document.querySelector('#guesses').addEventListener(
         elmToFocus.classList.add('focused');
         // elmToFocus.focus();
         elmToFocus.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    }
+    },
 );
 
 document.body.addEventListener(
@@ -296,7 +296,7 @@ document.body.addEventListener(
             return;
         }
         redactedWord.classList.toggle('show-word-length');
-    }
+    },
 );
 
 setInterval(() => {

@@ -1,4 +1,4 @@
-import t from 'tap';
+import test from 'ava';
 import esmock from 'esmock';
 import { addDays } from 'date-fns';
 
@@ -10,20 +10,24 @@ const { START_DATE, default: getWikipediaArticleTitleOfTheDay } = await esmock(
             readFile: async () =>
                 '["Mata Hari", "Norges Grunnlov", "Gustav Holst"]',
         },
-    }
+    },
 );
 
-t.test('getWikipediaArticleTitleOfTheDay()', async (t) => {
-    t.equal(
+test('getWikipediaArticleTitleOfTheDay()', async (t) => {
+    t.is(
         await getWikipediaArticleTitleOfTheDay(addDays(START_DATE, 0)),
-        'Mata Hari'
+        'Mata Hari',
     );
-    t.equal(
+    t.is(
         await getWikipediaArticleTitleOfTheDay(addDays(START_DATE, 1)),
-        'Norges Grunnlov'
+        'Norges Grunnlov',
     );
-    t.equal(
+    t.is(
         await getWikipediaArticleTitleOfTheDay(addDays(START_DATE, 2)),
-        'Gustav Holst'
+        'Gustav Holst',
+    );
+    t.is(
+        await getWikipediaArticleTitleOfTheDay(addDays(START_DATE, 3)),
+        'Mata Hari',
     );
 });

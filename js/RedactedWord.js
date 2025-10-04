@@ -18,7 +18,7 @@ export default class RedactedWord extends HTMLElement {
             classList.remove('clickable', 'show-word-length');
         } else {
             this.textContent = '█'.repeat(
-                parseInt(this.getAttribute('data-length'))
+                parseInt(this.getAttribute('data-length')),
             );
             classList.add('clickable');
         }

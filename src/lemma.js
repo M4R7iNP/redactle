@@ -4,7 +4,7 @@ import { resolve, dirname } from 'node:path';
 import sqlite3 from 'sqlite3';
 
 const db = new sqlite3.Database(
-    resolve(dirname(fileURLToPath(import.meta.url)), '../data/ordbank.db')
+    resolve(dirname(fileURLToPath(import.meta.url)), '../data/ordbank.db'),
 );
 
 const get_lemmas_stmt = db.prepare(`
@@ -18,7 +18,7 @@ const get_lemmas_stmt = db.prepare(`
 `);
 
 const get_lemmas_stmt_all = promisify(
-    get_lemmas_stmt.all.bind(get_lemmas_stmt)
+    get_lemmas_stmt.all.bind(get_lemmas_stmt),
 );
 
 /**
@@ -30,5 +30,5 @@ export const getLemmas = async (words) =>
         /**
          * @param {Array<{ OPPSLAG: string }>} rows
          */
-        (rows) => rows.map((row) => row.OPPSLAG)
+        (rows) => rows.map((row) => row.OPPSLAG),
     );

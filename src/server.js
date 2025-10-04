@@ -49,7 +49,7 @@ const wss = new WebSocketServer({
  */
 const hasGuessedSolution = (game, guessedWords) =>
     game.solutionWords.every((word) =>
-        guessedWords.includes(word.toLowerCase())
+        guessedWords.includes(word.toLowerCase()),
     );
 
 /**
@@ -68,7 +68,7 @@ wss.on('connection', async (conn, req) => {
     const qs = new URLSearchParams(req.url.replace(/^[^?]*/, ''));
     const gameId = String(qs.get('gameId'));
     const playerId = String(
-        qs.get('playerId') || Math.random().toString(16).substring(2)
+        qs.get('playerId') || Math.random().toString(16).substring(2),
     );
     const emoji = sanitizeEmoji(qs.get('emoji') || '') || '🙂';
     if (!GAME_CLIENTS.has(gameId)) {
@@ -77,7 +77,7 @@ wss.on('connection', async (conn, req) => {
     GAME_CLIENTS.get(gameId).add(conn);
     sendToGameClients(
         gameId,
-        JSON.stringify({ action: 'PLAYER_JOINED', emoji })
+        JSON.stringify({ action: 'PLAYER_JOINED', emoji }),
     );
 
     let game = (await getGameById(gameId)) ?? (await createGame(gameId));
@@ -91,9 +91,9 @@ wss.on('connection', async (conn, req) => {
             action: 'GAME_STATE',
             redactedState: game.redactedState,
             guesses: game.guesses.map((guess) =>
-                formatGuessForClients(game, guess)
+                formatGuessForClients(game, guess),
             ),
-        })
+        }),
     );
 
     conn.on('message', async (rawData) => {
@@ -118,9 +118,9 @@ wss.on('connection', async (conn, req) => {
                         action: 'GAME_STATE',
                         redactedState: game.redactedState,
                         guesses: game.guesses.map((guess) =>
-                            formatGuessForClients(game, guess)
+                            formatGuessForClients(game, guess),
                         ),
-                    })
+                    }),
                 );
                 return;
             }
@@ -133,7 +133,7 @@ wss.on('connection', async (conn, req) => {
                 const word = String(data.word).toLowerCase();
 
                 let lemmas = (await getLemmas(word)).map((word) =>
-                    normalize(word)
+                    normalize(word),
                 );
                 if (!lemmas?.length) {
                     lemmas = [normalize(word)];
@@ -149,13 +149,13 @@ wss.on('connection', async (conn, req) => {
                 const game = await getGameById(gameId);
                 const existingGuess = game.guesses.find((existingGuess) =>
                     lemmas.find(
-                        (newGuessLemma) => existingGuess.word === newGuessLemma
+                        (newGuessLemma) => existingGuess.word === newGuessLemma,
                         // existingGuess.occurredLemmas.includes(newGuessLemma)
-                    )
+                    ),
                 );
                 if (existingGuess) {
                     conn.send(
-                        JSON.stringify({ action: 'EXISTING_GUESS', guess })
+                        JSON.stringify({ action: 'EXISTING_GUESS', guess }),
                     );
                     return;
                 }
@@ -168,11 +168,11 @@ wss.on('connection', async (conn, req) => {
                 guess.variations ??= [];
                 guess.variationWordIds ??= [];
                 const lemmasNormalized = lemmas.map((lemma) =>
-                    normalize(lemma)
+                    normalize(lemma),
                 );
                 for (const [idx, gameWord] of game.words.entries()) {
                     const matchingNormalizedLemmaIdx = lemmasNormalized.indexOf(
-                        normalize(gameWord)
+                        normalize(gameWord),
                     );
                     if (matchingNormalizedLemmaIdx !== -1) {
                         guess.occurrences++;
@@ -204,9 +204,9 @@ wss.on('connection', async (conn, req) => {
                             action: 'GAME_STATE',
                             redactedState: game.redactedState,
                             guesses: game.guesses.map((guess) =>
-                                formatGuessForClients(game, guess)
+                                formatGuessForClients(game, guess),
                             ),
-                        })
+                        }),
                     );
                 } else {
                     sendToGameClients(
@@ -214,7 +214,7 @@ wss.on('connection', async (conn, req) => {
                         JSON.stringify({
                             action: 'GUESS',
                             guess: formatGuessForClients(game, guess),
-                        })
+                        }),
                     );
                 }
             }
